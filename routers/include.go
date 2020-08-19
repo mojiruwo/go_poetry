@@ -14,6 +14,7 @@ func Include(opts ...Option) {
 // 初始化
 func Init() *gin.Engine {
 	r := gin.New()
+	r.LoadHTMLGlob("template/**/*")
 	for _, opt := range options {
 		opt(r)
 	}

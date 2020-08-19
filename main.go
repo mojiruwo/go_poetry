@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"go_poetry/routers"
 )
-
 func main() {
 	// 加载多个APP的路由配置
 	routers.Include(routers.ApiRouters, routers.WebRouters)

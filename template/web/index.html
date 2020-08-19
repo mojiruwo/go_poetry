@@ -1,0 +1,51 @@
+{{ define "web/index.html" }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{.title}}</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/mui/3.7.1/css/mui.css" rel="stylesheet">
+</head>
+<body>
+<div class="mui-card">
+    <!--页眉，放置标题-->
+    <div class="mui-card-header">自动生成古诗词</div>
+    <!--内容区-->
+    <div class="mui-card-content">
+        <form class="mui-input-group">
+            <div class="mui-input-row">
+                <label>输入藏头</label>
+                <input type="text" class="mui-input-clear" id="ct" placeholder="请输入藏头，不输入自动生成">
+            </div>
+            <div class="mui-button-row">
+                <button type="button" class="mui-btn mui-btn-primary" id="build" >点击生成</button>
+            </div>
+        </form>
+    </div>
+    <!--页脚，放置补充信息或支持的操作-->
+    <div class="mui-card-footer" id="txt"></div>
+</div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.8.3/jquery.js"></script>
+<script>
+    $('#build').on('click',function(){
+        var ct = $('#ct').val();
+        $.ajax('/api/index',{
+            data:{
+                name:ct,
+            },
+            dataType:'json',//服务器返回json格式数据
+            type:'get',//HTTP请求类型
+            success:function(data){
+                //获得服务器响应
+                console.log(data);
+                $("#txt").text(data.txt);
+            }
+        });
+    });
+</script>
+</body>
+</html>
+{{ end }}

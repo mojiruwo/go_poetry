@@ -1,7 +1,10 @@
 package routers
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"go_poetry/controller/web"
+)
 
 func WebRouters(e *gin.Engine) {
-	e.GET("/web/index", )
+	e.GET("/web/index", web.Poetry)
 }
