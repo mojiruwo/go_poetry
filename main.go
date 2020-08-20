@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/spf13/viper"
+	_ "go_poetry/config"
 	"go_poetry/routers"
 )
 func main() {
@@ -9,7 +11,8 @@ func main() {
 	routers.Include(routers.ApiRouters, routers.WebRouters)
 	// 初始化路由
 	r := routers.Init()
-	if err := r.Run(); err != nil {
+	port := viper.GetString("shell.path")
+	if err := r.Run(port); err != nil {
 		fmt.Println("startup service failed, err:%v\n", err)
 	}
 }

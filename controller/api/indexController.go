@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"go_poetry/utils"
 	"net/http"
 	"os/exec"
@@ -10,7 +11,7 @@ import (
 
 func Buildpoetry(c *gin.Context){
 	name := c.DefaultQuery("name", "")
-	command := "D:\\study\\ai_poetry\\build.py"
+	command := viper.GetString("shell.path")
 	cmd := exec.Command("python", command, name)
 	output, err := cmd.Output()
 	if err != nil {
