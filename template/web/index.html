@@ -25,11 +25,12 @@
         </form>
     </div>
     <!--页脚，放置补充信息或支持的操作-->
-    <div class="mui-card-footer" id="txt"></div>
+    <div class="mui-card-footer" id="txt" data-clipboard-text=""></div>
 </div>
 
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.8.3/jquery.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/mui/3.7.1/js/mui.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.6/clipboard.js"></script>
 <script>
     $('#build').on('click',function(){
         var ct = $('#ct').val();
@@ -45,6 +46,7 @@
                 console.log(data);
                 $("#txt").text(data.txt);
                 mui('#build').button('reset');
+                $("#txt").attr("data-clipboard-text",data.txt);
             }
         });
     });
@@ -54,40 +56,18 @@
             longtap: true, //默认为false
         }
     });
-    // 使用mui的长按事件 我把我的复制元素 class 设置为copy-text
-    mui('body').on('longtap', '#txt', function () {
-        // 每次触发事件就会使用 innerText 获取纯文本。
-        var copy_content = this.innerText;
-        // 加了一个确认框 让用户选择是否复制
-        mui.confirm('您要复制内容吗？', '', ['取消', '复制内容'], function (e) {
-            if (e.index == 1) {
-                //判断是安卓还是ios
-                if (mui.os.ios) {
-                    // ios 的方法 这个我没具体研究过 直接拿来用了
-                    var UIPasteboard = plus.ios.importClass("UIPasteboard");
-                    var generalPasteboard = UIPasteboard.generalPasteboard();
-                    //设置 复制的内容也就是 触发事件 innerText 获取的内容
-                    generalPasteboard.plusCallMethod({
-                        setValue: copy_content,
-                        forPasteboardType: "public.utf8-plain-text"
-                    });
-                    generalPasteboard.plusCallMethod({
-                        valueForPasteboardType: "public.utf8-plain-text"
-                    });
-                    // 在上边都走完 给用户一个提示
-                    mui.toast('复制成功');
-                } else {
-                    //安卓 的方法 这个我没具体研究过 直接拿来用了
-                    var context = plus.android.importClass("android.content.Context");
-                    var main = plus.android.runtimeMainActivity();
-                    var clip = main.getSystemService(context.CLIPBOARD_SERVICE);
-                    plus.android.invoke(clip, "setText", copy_content);
-                    // 在上边都走完 给用户一个提示
-                    mui.toast('复制成功');
-                }
+    function cpValue(){
+        var cp = new ClipboardJS("#txt");
+        cp.on("success", function(e) {
+            if(e.text != ''){
+                mui.toast('复制成功');
             }
-        })
-    })
+        });
+        cp.on("error", function(e) {
+            mui.toast('复制失败');
+        });
+    }
+    cpValue();
 </script>
 </body>
 </html>
